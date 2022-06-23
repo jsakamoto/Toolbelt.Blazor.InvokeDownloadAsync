@@ -5,19 +5,19 @@
 @inject IJSRuntime JSRuntime
 
 <p>
-    <span>File Name</span><input type="text" @bind="this._FileName" />
+    <span>File Name</span><input type="text" id="file-name" @bind="this._FileName" />
 </p>
 
 <p>
-    <span>Content Type</span><input type="text" @bind="this._ContentType" />
+    <span>Content Type</span><input type="text" id="content-type" @bind="this._ContentType" />
 </p>
 
 <p>
-    <span>Contents (Base64)</span><textarea @bind="this._ContentsBase64" />
+    <span>Contents (Base64)</span><textarea id="contents-base64" @bind="this._ContentsBase64" />
 </p>
 
 <p>
-    <button @onclick="OnClickDownloadAsync">Download</button>
+    <button id="download-button" @onclick="OnClickDownloadAsync">Download</button>
 </p>
 
 <footer>
