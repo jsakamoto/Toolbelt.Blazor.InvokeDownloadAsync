@@ -1,4 +1,4 @@
-export function invokeDownload(fileName, contentType, contents) {
+export const invokeDownload = (fileName, contentType, contents) => {
     // Convert base64 string to Uint8Array array if the type of contents is string.
     const uint8Array = typeof (contents) === 'string' ? new Uint8Array(atob(contents).split('').map(c => c.charCodeAt(0))) : contents;
     // Wrap it by Blob object.
@@ -13,4 +13,4 @@ export function invokeDownload(fileName, contentType, contents) {
     anchorElement.remove();
     // At last, release unused resources.
     URL.revokeObjectURL(url);
-}
+};

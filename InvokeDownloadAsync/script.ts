@@ -1,4 +1,4 @@
-﻿export function invokeDownload(fileName: string, contentType: string, contents: string | Uint8Array): void {
+﻿export const invokeDownload = (fileName: string, contentType: string, contents: string | Uint8Array): void => {
 
     // Convert base64 string to Uint8Array array if the type of contents is string.
     const uint8Array = typeof (contents) === 'string' ? new Uint8Array(atob(contents).split('').map(c => c.charCodeAt(0))) : contents;
