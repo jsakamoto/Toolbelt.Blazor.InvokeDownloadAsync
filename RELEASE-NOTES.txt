@@ -1,2 +1,5 @@
+v.1.1.0
+- Improve PWA offline support.
+
 v.1.0.0
 - 1st release.
