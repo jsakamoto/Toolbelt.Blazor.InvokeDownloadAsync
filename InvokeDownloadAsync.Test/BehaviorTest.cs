@@ -14,6 +14,7 @@ public class BehaviorTest
     private static readonly IEnumerable<BlazorVersion> BlazorVersions = new[] {
         BlazorVersion.NET50,
         BlazorVersion.NET60,
+        BlazorVersion.NET70,
     };
 
     public static object[][] TestCases { get; } = (

@@ -3,5 +3,6 @@
 public enum BlazorVersion
 {
     NET50,
-    NET60
+    NET60,
+    NET70
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Playwright;
 using static Toolbelt.Blazor.InvokeDownloadAsync.Test.Internals.BlazorVersion;
 using static Toolbelt.Blazor.InvokeDownloadAsync.Test.Internals.HostingModel;
 
@@ -12,6 +13,9 @@ public class TestContext : IAsyncDisposable
 
         {new SampleSiteKey(Wasm,   NET60),  new SampleSite(5018, "Wasm",   "net6.0")},
         {new SampleSiteKey(Server, NET60),  new SampleSite(5021, "Server", "net6.0")},
+
+        {new SampleSiteKey(Wasm,   NET70),  new SampleSite(5019, "Wasm",   "net7.0")},
+        {new SampleSiteKey(Server, NET70),  new SampleSite(5022, "Server", "net7.0")},
     };
 
     private IPlaywright? _Playwright = null;
@@ -20,24 +24,59 @@ public class TestContext : IAsyncDisposable
 
     private IPage? _Page = null;
 
-    public async ValueTask<IPage> GetPageAsync()
+    private class TestOptions
     {
-        if (this._Playwright == null) this._Playwright = await Playwright.CreateAsync();
-        if (this._Browser == null)
-        {
-            this._Browser = await this._Playwright.Chromium.LaunchAsync(new()
-            {
-                Channel = "chrome",
-                Headless = false
-            });
-        }
-        if (this._Page == null) this._Page = await this._Browser.NewPageAsync();
+        public string Browser { get; set; } = "";
 
-        return this._Page;
+        public bool Headless { get; set; } = true;
+
+        public bool SkipInstallBrowser { get; set; } = false;
     }
+
+    private readonly TestOptions _Options = new();
 
     public TestContext()
     {
+        var configuration = new ConfigurationBuilder()
+            .AddEnvironmentVariables(prefix: "DOTNET_")
+            .AddTestParameters()
+            .Build();
+        configuration.Bind(this._Options);
+
+        if (!this._Options.SkipInstallBrowser)
+        {
+            Microsoft.Playwright.Program.Main(new[] { "install" });
+        }
+    }
+
+    public async ValueTask<IPage> GetPageAsync()
+    {
+        this._Playwright ??= await Playwright.CreateAsync();
+        this._Browser ??= await this.LaunchBrowserAsync(this._Playwright);
+        this._Page ??= await this._Browser.NewPageAsync();
+        return this._Page;
+    }
+
+    private Task<IBrowser> LaunchBrowserAsync(IPlaywright playwright)
+    {
+        var browserType = this._Options.Browser.ToLower() switch
+        {
+            "firefox" => playwright.Firefox,
+            "webkit" => playwright.Webkit,
+            _ => playwright.Chromium
+        };
+
+        var channel = this._Options.Browser.ToLower() switch
+        {
+            "firefox" or "webkit" => "",
+            _ => this._Options.Browser.ToLower()
+        };
+
+        return browserType.LaunchAsync(new()
+        {
+            Channel = channel,
+            Headless = this._Options.Headless,
+        });
     }
 
     public ValueTask<SampleSite> StartHostAsync(HostingModel hostingModel, BlazorVersion blazorVersion)
@@ -47,8 +86,8 @@ public class TestContext : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        Parallel.ForEach(SampleSites.Values, sampleSite => sampleSite.Stop());
         if (this._Browser != null) await this._Browser.DisposeAsync();
         if (this._Playwright != null) this._Playwright.Dispose();
+        Parallel.ForEach(SampleSites.Values, sampleSite => sampleSite.Stop());
     }
 }
