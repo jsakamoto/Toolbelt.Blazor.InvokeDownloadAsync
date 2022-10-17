@@ -1,0 +1,36 @@
+﻿@page "/demo2"
+@inject IJSRuntime JSRuntime
+
+<button @onclick="BeginDownloadAsync">
+    Begin Download
+</button>
+
+<div style="display: none;">
+    <canvas @ref="_Canvas" width="200px" height="200px"></canvas>
+</div>
+
+@code
+{
+    private ElementReference _Canvas;
+
+    private ValueTask<IJSObjectReference> GetModuleAsync() => JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/SampleSite.Components/Demo2.razor.js");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        await using var module = await GetModuleAsync();
+        await module.InvokeVoidAsync("draw", _Canvas);
+    }
+
+    private async Task BeginDownloadAsync()
+    {
+        await using var module = await GetModuleAsync();
+        var dataURL = await module.InvokeAsync<string>("toDataURL", _Canvas, "image/png");
+        var pictureBytes = Convert.FromBase64String(dataURL.Split(',').Last());
+
+        await this.JSRuntime.InvokeDownloadAsync(
+            "Foo.png",
+            "image/png",
+            pictureBytes);
+    }
+}

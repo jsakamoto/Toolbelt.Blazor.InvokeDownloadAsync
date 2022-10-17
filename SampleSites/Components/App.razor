@@ -1,40 +1,8 @@
-﻿@using System.Text
-@using System.Runtime.InteropServices
-@using Toolbelt.Blazor.Extensions
-
-@inject IJSRuntime JSRuntime
-
-<p>
-    <span>File Name</span><input type="text" id="file-name" @bind="this._FileName" />
-</p>
-
-<p>
-    <span>Content Type</span><input type="text" id="content-type" @bind="this._ContentType" />
-</p>
-
-<p>
-    <span>Contents (Base64)</span><textarea id="contents-base64" @bind="this._ContentsBase64" />
-</p>
-
-<p>
-    <button id="download-button" @onclick="OnClickDownloadAsync">Download</button>
-</p>
-
-<footer>
-    <p>@RuntimeInformation.FrameworkDescription / @RuntimeInformation.ProcessArchitecture</p>
-</footer>
-
-@code
-{
-    private string _FileName = "foo-bar.txt";
-
-    private string _ContentType = "plain/text";
-
-    private string _ContentsBase64 = Convert.ToBase64String(Encoding.ASCII.GetBytes("Foo\r\nBar\r\n"));
-
-    private async Task OnClickDownloadAsync()
-    {
-        var contentBytes = Convert.FromBase64String(this._ContentsBase64);
-        await this.JSRuntime.InvokeDownloadAsync(_FileName, _ContentType, contentBytes);
-    }
-}
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" />
+    </Found>
+    <NotFound>
+        <p role="alert">Sorry, there's nothing at this address.</p>
+    </NotFound>
+</Router>

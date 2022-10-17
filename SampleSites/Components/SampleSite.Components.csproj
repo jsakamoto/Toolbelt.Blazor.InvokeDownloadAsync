@@ -5,10 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>10</LangVersion>
+    <ImplicitUsingsToolbeltBlazorExtensionsDownloading>enable</ImplicitUsingsToolbeltBlazorExtensionsDownloading>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Toolbelt.Blazor.InvokeDownloadAsync" Version="1.1.0" />
+    <PackageReference Include="Toolbelt.Blazor.InvokeDownloadAsync" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
