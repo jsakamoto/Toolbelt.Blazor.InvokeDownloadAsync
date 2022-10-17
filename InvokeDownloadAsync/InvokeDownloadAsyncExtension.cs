@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.JSInterop;
 
-namespace Toolbelt.Blazor.Extensions;
+namespace Toolbelt.Blazor.Extensions.Downloading;
 
 public static class InvokeDownloadAsyncExtension
 {
