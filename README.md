@@ -5,11 +5,15 @@
 This NuGet package simply adds the `InvokeDownloadAsync()` extension method on your Blazor apps.
 
 ```csharp
-@using Toolbelt.Blazor.Extensions
 @inject IJSRuntime JSRuntime
+
+<button @onclick="BeginDownloadAsync">
+  Begin Download
+</button>
 ...
 @code
 {
+  ...
   private async Task BeginDownloadAsync()
   {
     ...
@@ -20,6 +24,8 @@ This NuGet package simply adds the `InvokeDownloadAsync()` extension method on y
   }
 }
 ```
+
+![](https://raw.githubusercontent.com/jsakamoto/Toolbelt.Blazor.InvokeDownloadAsync/main/.assets/movie-001.gif)
 
 ## Features
 
@@ -43,7 +49,7 @@ Install this NuGet package to your Blazor application project.
 dotnet add package Toolbelt.Blazor.InvokeDownloadAsync
 ```
 
-After that, you can use the `InvokeDownloadAsync()` extension method for the `IJSRuntime` interface if you have opened the `Toolbelt.Blazor.Extensions` namespace.
+After that, you can use the `InvokeDownloadAsync()` extension method for the `IJSRuntime` interface.
 
 ### Syntax
 
@@ -54,6 +60,24 @@ ValueTask InvokeDownloadAsync(
       string contentType,
       byte[] contentBytes);
 ```
+
+### IImplicit using the namespace
+
+To use the `InvokeDownloadAsync()` extension method it requires open the namespace `Toolbelt.Blazor.Extensions.Downloading`. But in a general case, you don't need to open the namespace `Toolbelt.Blazor.Extensions.Downloading` explicitly because the NuGet package opens it implicitly by default.
+
+To prevent this default behavior, please set the `ImplicitUsingsToolbeltBlazorExtensionsDownloading` MSBuild property to `false`.
+
+```xml
+<!-- 📄 Your .csproj file -->
+<Project>
+  ...
+  <PropertyGroup>
+    ...
+    <ImplicitUsingsToolbeltBlazorExtensionsDownloading>false</ImplicitUsingsToolbeltBlazorExtensionsDownloading>
+    ...
+```
+
+To use this library on .NET 5, you must open the `Toolbelt.Blazor.Extensions.Downloading` namespace explicitly.
 
 ## Release notes
 

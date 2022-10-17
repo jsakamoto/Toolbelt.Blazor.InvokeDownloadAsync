@@ -1,3 +1,7 @@
+v.2.0.0
+- BREAKING CHANGE: Change the namespace.
+- Improve: Enable using namespace implicitly by default.
+
 v.1.1.0
 - Improve PWA offline support.
 
