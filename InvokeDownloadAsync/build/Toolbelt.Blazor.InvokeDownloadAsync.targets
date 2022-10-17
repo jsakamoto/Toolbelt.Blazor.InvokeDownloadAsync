@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup Condition=" '$(ImplicitUsingsToolbeltBlazorExtensionsDownloading)' != 'false' AND '$(ImplicitUsingsToolbeltBlazorExtensionsDownloading)' != 'disable' ">
+    <Using Include="Toolbelt.Blazor.Extensions.Downloading"/>
+  </ItemGroup>
+</Project>
